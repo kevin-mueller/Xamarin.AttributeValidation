@@ -33,14 +33,25 @@ namespace Xamarin.Validation.Attributes
         /// </returns>
         public string Test(string value)
         {
-            bool isValid = false;
-            if (value.Length >= MinimumLenght
-                && HasSpecialChars(value) == MustContainSpecial
-                && HasNumbers(value) == MustContainNumber
-                && HasAlpha(value) == MustContainAlpha)
+            bool isValid = true;
+
+            if (MustContainAlpha)
             {
-                isValid = true;
+                if (!HasAlpha(value))
+                    isValid = false;
             }
+            if (MustContainNumber)
+            {
+                if (!HasNumbers(value))
+                    isValid = false;
+            }
+            if (MustContainSpecial)
+            {
+                if (!HasSpecialChars(value))
+                    isValid = false;
+            }
+            if (value.Length < MinimumLenght)
+                isValid = false;
 
             return isValid ? string.Empty : ErrorMessage;
         }
