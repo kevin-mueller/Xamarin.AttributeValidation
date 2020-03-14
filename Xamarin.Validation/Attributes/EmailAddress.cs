@@ -17,7 +17,7 @@ namespace Xamarin.Validation.Attributes
 
         public EmailAddress(Type StringResourcesType, string key)
         {
-            var property = StringResourcesType.GetProperties().FirstOrDefault(x => x.Name.Equals(key));
+            var property = Array.Find(StringResourcesType.GetProperties(), x => x.Name.Equals(key));
             ErrorMessage = property.GetValue(null, null).ToString();
         }
 

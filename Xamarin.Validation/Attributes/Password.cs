@@ -10,6 +10,7 @@ namespace Xamarin.Validation.Attributes
         public int MinimumLenght { get; set; } = 8;
         public bool MustContainSpecial { get; set; } = true;
         public bool MustContainNumber { get; set; } = true;
+        public bool MustContainAlpha { get; set; } = true;
 
         public Password(string ErrorMessage)
         {
@@ -33,10 +34,20 @@ namespace Xamarin.Validation.Attributes
         public string Test(string value)
         {
             bool isValid = false;
-            if (value.Length >= MinimumLenght && HasSpecialChars(value) == MustContainSpecial && HasNumbers(value) == MustContainNumber)
+            if (value.Length >= MinimumLenght
+                && HasSpecialChars(value) == MustContainSpecial
+                && HasNumbers(value) == MustContainNumber
+                && HasAlpha(value) == MustContainAlpha)
+            {
                 isValid = true;
+            }
 
             return isValid ? string.Empty : ErrorMessage;
+        }
+
+        private bool HasAlpha(string value)
+        {
+            return value.Any(char.IsLetter);
         }
 
         private bool HasSpecialChars(string value)
