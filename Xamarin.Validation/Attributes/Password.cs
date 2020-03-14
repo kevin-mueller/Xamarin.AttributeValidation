@@ -18,7 +18,7 @@ namespace Xamarin.Validation.Attributes
 
         public Password(Type StringResourcesType, string key)
         {
-            var property = StringResourcesType.GetProperties().FirstOrDefault(x => x.Name.Equals(key));
+            var property = Array.Find(StringResourcesType.GetProperties(), x => x.Name.Equals(key));
             ErrorMessage = property.GetValue(null, null).ToString();
         }
 
@@ -33,7 +33,7 @@ namespace Xamarin.Validation.Attributes
         public string Test(string value)
         {
             bool isValid = false;
-            if (value.Length >= 8 && HasSpecialChars(value) && HasNumbers(value))
+            if (value.Length >= MinimumLenght && HasSpecialChars(value) == MustContainSpecial && HasNumbers(value) == MustContainNumber)
                 isValid = true;
 
             return isValid ? string.Empty : ErrorMessage;

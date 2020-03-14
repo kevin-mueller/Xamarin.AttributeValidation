@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Validation.Attributes;
 
@@ -18,9 +21,13 @@ namespace Xamarin.Validation
         /// </returns>
         public static async Task<bool> Validate(object viewModel)
         {
-            bool result = false;
+            bool isValid = true;
 
             var properties = viewModel.GetType().GetProperties();
+
+            var errorProperties = GetAllErrorProperties(properties);
+            ResetAllErrorMessages(errorProperties, viewModel);
+
             foreach (var property in properties)
             {
                 foreach (var att in property.GetCustomAttributes(typeof(IValidationAttribute), false))
@@ -40,11 +47,7 @@ namespace Xamarin.Validation
                     var validationResult = validationAttribute.Test(propertyValue);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
-                        result = false;
-
-                        var errorProperties = properties.Where(x => x.GetCustomAttributes(typeof(ErrorDisplay), false).Length > 0);
-                        if (!errorProperties.Any())
-                            throw new Exception("Your ViewModel does not contain a property with the ErrorDisplay attribute.");
+                        isValid = false;
 
                         foreach (var errorProp in errorProperties)
                         {
@@ -59,13 +62,25 @@ namespace Xamarin.Validation
                             }
                         }
                     }
-                    else
-                    {
-                        result = true;
-                    }
                 }
             }
-            return await Task.FromResult(result);
+            return await Task.FromResult(isValid);
+        }
+
+        private static IEnumerable<PropertyInfo> GetAllErrorProperties(PropertyInfo[] properties)
+        {
+            var errorProperties = properties.Where(x => x.GetCustomAttributes(typeof(ErrorDisplay), false).Length > 0);
+            if (!errorProperties.Any())
+                throw new Exception("Your ViewModel does not contain a property with the ErrorDisplay attribute.");
+            return errorProperties;
+        }
+
+        private static void ResetAllErrorMessages(IEnumerable<PropertyInfo> errorProperties, object viewModel)
+        {
+            foreach (var errorProperty in errorProperties)
+            {
+                errorProperty.SetValue(viewModel, string.Empty);
+            }
         }
     }
 }
