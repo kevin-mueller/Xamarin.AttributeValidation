@@ -29,7 +29,7 @@ namespace Xamarin.Validation.Attributes
         /// string.Empty if everything is allright.
         /// Otherwise the error message.
         /// </returns>
-        public string Test(string value)
+        public string ValidateValue(string value)
         {
             var regex = new Regex(pattern);
             return !regex.IsMatch(value) ? ErrorMessage : string.Empty;

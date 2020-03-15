@@ -32,7 +32,7 @@ namespace Xamarin.Validation.Attributes
         /// string.Empty if everything is allright.
         /// Otherwise the error message.
         /// </returns>
-        public string Test(string value)
+        public string ValidateValue(string value)
         {
             return (value.Length >= length) ? string.Empty : ErrorMessage;
         }

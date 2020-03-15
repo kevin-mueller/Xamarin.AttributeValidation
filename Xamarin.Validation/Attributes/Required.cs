@@ -29,7 +29,7 @@ namespace Xamarin.Validation.Attributes
         /// string.Empty if  everything is allright.
         /// Otherwise the error Message.
         /// </returns>
-        public string Test(string value)
+        public string ValidateValue(string value)
         {
             return string.IsNullOrEmpty(value) ? ErrorMessage : string.Empty;
         }

@@ -11,6 +11,7 @@ namespace Xamarin.Validation.Attributes
         public bool MustContainSpecial { get; set; } = true;
         public bool MustContainNumber { get; set; } = true;
         public bool MustContainAlpha { get; set; } = true;
+        public bool MustContainUpperCase { get; set; } = true;
 
         public Password(string ErrorMessage)
         {
@@ -31,7 +32,7 @@ namespace Xamarin.Validation.Attributes
         /// string.Empty if the password is valid.
         /// Otherwise the errormessage.
         /// </returns>
-        public string Test(string value)
+        public string ValidateValue(string value)
         {
             bool isValid = true;
 
@@ -48,6 +49,11 @@ namespace Xamarin.Validation.Attributes
             if (MustContainSpecial)
             {
                 if (!HasSpecialChars(value))
+                    isValid = false;
+            }
+            if (MustContainUpperCase)
+            {
+                if (!HasUpperCase(value))
                     isValid = false;
             }
             if (value.Length < MinimumLenght)
@@ -69,6 +75,11 @@ namespace Xamarin.Validation.Attributes
         private bool HasNumbers(string value)
         {
             return value.Any(char.IsDigit);
+        }
+
+        private bool HasUpperCase(string value)
+        {
+            return value.Any(char.IsUpper);
         }
     }
 }

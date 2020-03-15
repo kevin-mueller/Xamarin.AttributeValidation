@@ -2,7 +2,7 @@
 {
     internal interface IValidationAttribute
     {
-        string Test(string value);
+        string ValidateValue(string value);
 
         string ErrorMessage { get; }
     }

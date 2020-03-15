@@ -44,7 +44,7 @@ namespace Xamarin.Validation
                     }
                     var propertyValue = property.GetValue(viewModel)?.ToString() ?? string.Empty;
 
-                    var validationResult = validationAttribute.Test(propertyValue);
+                    var validationResult = validationAttribute.ValidateValue(propertyValue);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
                         isValid = false;
