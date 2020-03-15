@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Xamarin.Validation.Attributes
+namespace Xamarin.AttributeValidation.Attributes
 {
     public sealed class StringLength : Attribute, IValidationAttribute
     {

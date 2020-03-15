@@ -1,4 +1,4 @@
-﻿namespace Xamarin.Validation.Attributes
+﻿namespace Xamarin.AttributeValidation.Attributes
 {
     internal interface IValidationAttribute
     {

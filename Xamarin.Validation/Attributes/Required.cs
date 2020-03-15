@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Xamarin.Validation.Attributes
+namespace Xamarin.AttributeValidation.Attributes
 {
     public sealed class Required : Attribute, IValidationAttribute
     {

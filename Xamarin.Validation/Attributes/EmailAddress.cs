@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Xamarin.Validation.Attributes
+namespace Xamarin.AttributeValidation.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public sealed class EmailAddress : Attribute, IValidationAttribute

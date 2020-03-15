@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Validation", "Xamarin.Validation\Xamarin.Validation.csproj", "{2511E4AC-88C2-4023-9FB7-9CF4C1C59FCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xamarin.AttributeValidation", "Xamarin.Validation\Xamarin.AttributeValidation.csproj", "{2511E4AC-88C2-4023-9FB7-9CF4C1C59FCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

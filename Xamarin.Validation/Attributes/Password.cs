@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Xamarin.Validation.Attributes
+namespace Xamarin.AttributeValidation.Attributes
 {
     public sealed class Password : Attribute, IValidationAttribute
     {
