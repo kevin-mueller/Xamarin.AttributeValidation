@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -58,7 +57,8 @@ namespace Xamarin.AttributeValidation
                             }
                             else
                             {
-                                errorProp.SetValue(viewModel, value + "\n" + validationResult);
+                                errorProp.SetValue(viewModel, value + "\n"
+                                    + "- " + validationResult);
                             }
                         }
                     }
