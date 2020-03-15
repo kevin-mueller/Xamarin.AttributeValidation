@@ -1,7 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/kevin-mueller/Xamarin.AttributeValidation.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <ProjectUrl>https://github.com/kevin-mueller/Xamarin.AttributeValidation</ProjectUrl>
+    <ProjectType>git</ProjectType>
 
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+
+    <PackageReleaseNotes>Fixed error formatting</PackageReleaseNotes>
+
+    <Description>Allows the usage of attributes on properties in the ViewModel to validate the UI.</Description>
+
+    <PackageProjectUrl>https://github.com/kevin-mueller/Xamarin.AttributeValidation</PackageProjectUrl>
+
+    <FileVersion>1.0.0.1</FileVersion>
+
+    <Version>1.0.3</Version>
+  </PropertyGroup>
 </Project>

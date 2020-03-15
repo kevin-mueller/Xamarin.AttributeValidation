@@ -53,7 +53,7 @@ namespace Xamarin.AttributeValidation
                             var value = errorProp.GetValue(viewModel)?.ToString();
                             if (string.IsNullOrEmpty(value))
                             {
-                                errorProp.SetValue(viewModel, validationResult);
+                                errorProp.SetValue(viewModel, "- " + validationResult);
                             }
                             else
                             {
