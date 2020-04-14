@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            mc:Ignorable="d"
+            xmlns:views="clr-namespace:Xamarin.AttributeValidation.Example.Views"
+            x:Class="Xamarin.AttributeValidation.Example.Views.MainPage">
+
+    <StackLayout Orientation="Vertical" Padding="14">
+        <Label Text="{Binding ErrorDisplay}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
+
+        <Entry x:Name="Entry_Email" Placeholder="Email" Text="{Binding EmailAddress}" ReturnType="Next" />
+        <Entry x:Name="Entry_Password" Placeholder="Password" Text="{Binding Password}" ReturnType="Next" IsPassword="True" />
+        <Entry x:Name="Entry_Name" Placeholder="Name" Text="{Binding Name}" ReturnType="Next" />
+        <Entry x:Name="Entry_Age" Placeholder="Age" Text="{Binding Age}" ReturnType="Next" />
+        <Entry x:Name="Entry_Address" Placeholder="Address + House Number" Text="{Binding Address}" ReturnType="Next" />
+        <Entry x:Name="Url" Placeholder="Url" Text="{Binding Url}" ReturnType="Next" />
+
+        <Button HorizontalOptions="CenterAndExpand" Text="Validate" Clicked="Button_Clicked" />
+    </StackLayout>
+</ContentPage>
