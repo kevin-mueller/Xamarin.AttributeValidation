@@ -1,4 +1,6 @@
 Get it on NuGet:
+https://www.nuget.org/packages/Xamarin.AttributeValidation/
+
 ![Nuget](https://img.shields.io/nuget/v/Xamarin.AttributeValidation)
 
 
