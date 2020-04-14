@@ -1,3 +1,7 @@
+Get it on NuGet:
+![Nuget](https://img.shields.io/nuget/v/Xamarin.AttributeValidation)
+
+
 # Xamarin.AttributeValidation
 This library allows to use attributes in the ViewModel to validate input fields.
 The usage is very similar to ASP.NET Core Form validation.
