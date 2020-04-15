@@ -115,6 +115,7 @@ But don't worry!
 Every Attribute has an overload, where you can pass the type and the key of a resource file.
 
 **IMPORTANT!** The Resource File must have code generation enabled and set to "external tool" (public properties, NOT internal!).
+I highly recommend the ResX Manager: https://marketplace.visualstudio.com/items?itemName=TomEnglert.ResXManager
 
 ### Password
 ```csharp
