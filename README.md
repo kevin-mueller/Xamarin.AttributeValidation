@@ -114,6 +114,8 @@ Since Attributes are hardcoded into the assembly, you can only pass hardcoded st
 But don't worry!
 Every Attribute has an overload, where you can pass the type and the key of a resource file.
 
+**IMPORTANT!** The Resource File must have code generation enabled and set to "external tool" (public properties, NOT internal!).
+
 ### Password
 ```csharp
 //Using the overload to use the localized string value.
