@@ -22,7 +22,7 @@ namespace Example {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    public class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Example {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Example.Strings", typeof(Strings).Assembly);
@@ -51,7 +51,7 @@ namespace Example {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Example {
         /// <summary>
         ///   Looks up a localized string similar to Please enter a valid Email Address.
         /// </summary>
-        internal static string Error_EmailAddress {
+        public static string Error_EmailAddress {
             get {
                 return ResourceManager.GetString("Error_EmailAddress", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Example {
         /// <summary>
         ///   Looks up a localized string similar to Please enter a stronger password.
         /// </summary>
-        internal static string Error_Password {
+        public static string Error_Password {
             get {
                 return ResourceManager.GetString("Error_Password", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Example {
         /// <summary>
         ///   Looks up a localized string similar to Age is not in Range.
         /// </summary>
-        internal static string Error_Range {
+        public static string Error_Range {
             get {
                 return ResourceManager.GetString("Error_Range", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Example {
         /// <summary>
         ///   Looks up a localized string similar to Address does not contain a housenumber.
         /// </summary>
-        internal static string Error_Regex {
+        public static string Error_Regex {
             get {
                 return ResourceManager.GetString("Error_Regex", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Example {
         /// <summary>
         ///   Looks up a localized string similar to Please fill out all required fields.
         /// </summary>
-        internal static string Error_Required {
+        public static string Error_Required {
             get {
                 return ResourceManager.GetString("Error_Required", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Example {
         /// <summary>
         ///   Looks up a localized string similar to Name is too short.
         /// </summary>
-        internal static string Error_StringLength {
+        public static string Error_StringLength {
             get {
                 return ResourceManager.GetString("Error_StringLength", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Example {
         /// <summary>
         ///   Looks up a localized string similar to Please enter a valid Url.
         /// </summary>
-        internal static string Error_Url {
+        public static string Error_Url {
             get {
                 return ResourceManager.GetString("Error_Url", resourceCulture);
             }

@@ -27,7 +27,7 @@ namespace Xamarin.AttributeValidation.Example.ViewModels
         [RegularExpression(typeof(Strings), nameof(Strings.Error_Regex), @"\d")]
         public string Address { get; set; }
 
-        [Url(typeof(Strings), nameof(Strings.Error_Regex))]
+        [Url(typeof(Strings), nameof(Strings.Error_Url))]
         public string Url { get; set; }
     }
 }

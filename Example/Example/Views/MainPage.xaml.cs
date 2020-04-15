@@ -16,11 +16,13 @@ namespace Xamarin.AttributeValidation.Example.Views
         {
             InitializeComponent();
             BindingContext = viewModel = new ExampleViewModel();
+            
         }
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            var isValid = await Validator.Validate(viewModel);
+            //var isValid = await Validator.Validate(viewModel);
+            var isValid = this.Validate();
             if (isValid)
                 await DisplayAlert("Validation", "Model is valid", "OK");
         }

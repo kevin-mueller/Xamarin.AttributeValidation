@@ -19,4 +19,9 @@
 
     <Version>1.0.3</Version>
   </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Xamarin.Forms.Core">
+      <HintPath>..\..\..\..\..\..\..\Microsoft\Xamarin\NuGet\xamarin.forms\4.4.0.991265\lib\netstandard2.0\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

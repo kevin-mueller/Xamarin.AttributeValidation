@@ -8,7 +8,7 @@
             x:Class="Xamarin.AttributeValidation.Example.Views.MainPage">
 
     <StackLayout Orientation="Vertical" Padding="14">
-        <Label Text="{Binding ErrorDisplay}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
+        <Label Text="{Binding ErrorMessage}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" />
 
         <Entry x:Name="Entry_Email" Placeholder="Email" Text="{Binding EmailAddress}" ReturnType="Next" />
         <Entry x:Name="Entry_Password" Placeholder="Password" Text="{Binding Password}" ReturnType="Next" IsPassword="True" />
