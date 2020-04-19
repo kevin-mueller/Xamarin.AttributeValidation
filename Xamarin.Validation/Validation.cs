@@ -1,25 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Xamarin.AttributeValidation.Attributes;
 using Xamarin.AttributeValidation.Helpers;
-using Xamarin.AttributeValidation.Views;
 using Xamarin.Forms;
 
 namespace Xamarin.AttributeValidation
 {
-    public static class Validation
+    internal class Validation
     {
-        public static bool Validate(this Page page)
-        {
-            //TODO First thing: Check for error display attribute
+        private static Validation _instance;
 
+        private readonly Dictionary<View, PropertyInfo> UIPropertyDictionary;
+
+        private bool HasBeenValidatedBefore;
+        internal static Validation GetInstance(Page page)
+        {
+            return _instance ?? (_instance = new Validation(page));
+        }
+
+        private Validation(Page page)
+        {
+            UIPropertyDictionary = GetUiPropertyDictionary(page);
+        }
+
+        internal bool Validate(Page page)
+        {
             var viewModel = page.BindingContext;
             //This maps the elements in the UI to their bound property in the viewmodel.
-            var uiPropertyDict = GetUiPropertyDictionary(page);
-            foreach (var property in uiPropertyDict.Values)
+
+            if (UIPropertyDictionary?.Count == 0)
+                throw new Exception("No Binding between ViewModel and UI Elements found.");
+
+            Grid grid;
+            if (!HasBeenValidatedBefore)
+            {
+                //Get a dummy element, for context reasons
+                var dummyElement = UIPropertyDictionary.Keys.First();
+
+                //Wrap everything in a grid, on the same row, in order to overlay elements.
+                grid = new Grid();
+                grid.RowDefinitions.Add(new RowDefinition());
+                var layout = (Layout)dummyElement.Parent;
+                grid.Children.Add(layout, 0, 0);
+
+                grid.Children.Add(new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand, TextColor = Color.Red });
+                ((ContentPage)page).Content = grid;
+            }
+            else
+            {
+                grid = (Grid)((ContentPage)page).Content;
+            }
+
+            foreach (var property in UIPropertyDictionary.Values)
             {
                 string propertyValue = string.Empty;
                 try
@@ -49,7 +83,7 @@ namespace Xamarin.AttributeValidation
                     var validationResult = validationAttribute.ValidateValue(propertyValue);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
-                        foreach (var view in uiPropertyDict.Where(pair => pair.Value.Equals(property)).Select(pair => pair.Key))
+                        foreach (var view in UIPropertyDictionary.Where(pair => pair.Value.Equals(property)).Select(pair => pair.Key))
                         {
                             Entry uiElement;
                             try
@@ -60,10 +94,22 @@ namespace Xamarin.AttributeValidation
                             {
                                 throw new Exception("Only Entry is supported for input validation.");
                             }
+                            var label = new Label()
+                            {
+                                Text = "X",
+                                TextColor = Color.Red,
+                                //HorizontalTextAlignment = TextAlignment.Center,
+                                //VerticalTextAlignment = TextAlignment.Center,
+                                //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                //VerticalOptions = LayoutOptions.CenterAndExpand
+                                TranslationX = uiElement.X + uiElement.Width,
+                                TranslationY = uiElement.Y
+                            };
+                            //label.TranslateTo(uiElement.X + uiElement.Width, uiElement.Y);
+                            grid.Children.Add(label, 0, 0);
                             //TODO find a way to display the error messages within the entry.
                             //Example: If error, display littel red icon on the end of the entry. If this icon is tapped, a small "bubble" pops up with the error message.
 
-                            //var layout = (StackLayout)uiElement.Parent;
                             //var index = layout.Children.IndexOf(uiElement);
                             //if (index >= layout.Children.Count - 1)
                             //{
@@ -79,11 +125,11 @@ namespace Xamarin.AttributeValidation
                     }
                 }
             }
-
+            HasBeenValidatedBefore = true;
             return true;
         }
 
-        private static Dictionary<View, PropertyInfo> GetUiPropertyDictionary(Page page)
+        private Dictionary<View, PropertyInfo> GetUiPropertyDictionary(Page page)
         {
             var dummyPage = new ContentPage();
             var dummyLayout = new StackLayout();
