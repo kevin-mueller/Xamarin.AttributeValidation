@@ -20,15 +20,19 @@
                     <ColumnDefinition Width="25*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="MessageGrid" HorizontalOptions="Start" VerticalOptions="Start">
-                    <Grid BackgroundColor="Black" HeightRequest="15" WidthRequest="15"
-            HorizontalOptions="End" VerticalOptions="Start" Rotation="45"
-            Margin="0,0,2.5,0" InputTransparent="True" />
-                    <Grid Padding="5,5,5,5" BackgroundColor="Black"  Margin="0,7,0,0"
-                HorizontalOptions="FillAndExpand" InputTransparent="True">
-                        <Label x:Name="InfoText" TextColor="Red"
-                    HorizontalOptions="Center" VerticalOptions="Center"
-                    InputTransparent="True" />
+                    <Grid BackgroundColor="Red" HeightRequest="7" WidthRequest="7"
+                            HorizontalOptions="End" VerticalOptions="Start" Rotation="45"
+                            Margin="0,0,7,0" InputTransparent="True" />
+                    
+                    <Grid Padding="5,5,5,5" BackgroundColor="Black"  Margin="0,3.5,0,0"
+                            HorizontalOptions="FillAndExpand" InputTransparent="True">
+                        
+                        <Label x:Name="InfoText" TextColor="White"
+                            HorizontalOptions="Center" VerticalOptions="Center"
+                            InputTransparent="True"
+                            LineBreakMode="TailTruncation"/>
                     </Grid>
+                    <Grid BackgroundColor="Red" HeightRequest="2" HorizontalOptions="FillAndExpand" VerticalOptions="Start" Margin="0,3.5,0,0"/>
                 </Grid>
             </Grid>
         </StackLayout>

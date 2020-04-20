@@ -28,15 +28,15 @@ namespace Xamarin.AttributeValidation
 
         private Validation(Page page)
         {
+            //This maps the elements in the UI to their bound property in the viewmodel.
             UiPropertyMapping = GetUiPropertyDictionary(page);
+
             renderedElements = new List<View>();
             viewModel = page.BindingContext;
         }
 
         internal bool Validate(Page page)
         {
-            //This maps the elements in the UI to their bound property in the viewmodel.
-
             if (UiPropertyMapping?.Count == 0)
                 throw new Exception("No Binding between ViewModel and UI Elements found.");
 
@@ -60,25 +60,28 @@ namespace Xamarin.AttributeValidation
                     MessagingCenter.Send<View>(grid, "Clear_FloatingText");
                 };
 
+                page.SizeChanged += delegate
+                {
+                    MessagingCenter.Send<View>(grid, "Clear_FloatingText");
+                    //Only re-render if there are already rendered elements.
+                    if (renderedElements.Count > 0)
+                        RenderElements(grid);
+                };
+
                 ((ContentPage)page).Content = grid;
             }
             else
             {
                 grid = (Grid)((ContentPage)page).Content;
             }
-
-            page.SizeChanged += delegate
-            {
-                //Only re-render if there are already rendered elements.
-                if (renderedElements.Count > 0)
-                    RenderElements(grid);
-            };
+            MessagingCenter.Send<View>(grid, "Clear_FloatingText");
 
             UpdateValidationResults();
             RenderElements(grid);
 
             HasBeenValidatedBefore = true;
-            return true;
+
+            return !UiPropertyMapping.Any(x => x.ValidationResult?.Count > 0);
         }
 
         private void UpdateValidationResults()
@@ -134,6 +137,9 @@ namespace Xamarin.AttributeValidation
 
             foreach (var valModel in UiPropertyMapping)
             {
+                if (valModel.ValidationResult?.Count == 0)
+                    continue;
+
                 var view = valModel.UiElement;
                 Entry uiElement;
                 try
@@ -145,28 +151,33 @@ namespace Xamarin.AttributeValidation
                     throw new Exception("Only Entry is supported for input validation.");
                 }
 
-                var label = new Label()
+                uiElement.Focused += delegate
                 {
-                    Text = "❗",
-                    TextColor = Color.Red,
-                    TranslationX = (uiElement.X + uiElement.Width) - 20,
-                    TranslationY = uiElement.Y + 10
-                };
-                grid.Children.Add(label, 0, 0);
+                    MessagingCenter.Send<View>(grid, "Clear_FloatingText");
 
-                var gestureRecognizerLabel = new TapGestureRecognizer();
-                gestureRecognizerLabel.Tapped += delegate
-                {
+                    if (valModel.ValidationResult?.Count == 0)
+                        return;
+
                     var bubble = new FloatingText(grid)
                     {
                         TranslationX = uiElement.X + uiElement.Width,
-                        TranslationY = uiElement.Y + uiElement.Height
+                        TranslationY = uiElement.Y + uiElement.Height - 4
                     };
                     bubble.FindByName<Label>("InfoText").Text = valModel.ValidationResult[0];
 
                     grid.Children.Add(bubble, 0, 0);
                 };
-                label.GestureRecognizers.Add(gestureRecognizerLabel);
+
+                var label = new Label()
+                {
+                    Text = "❗",
+                    TextColor = Color.Red,
+                    VerticalOptions = LayoutOptions.Start,
+                    HorizontalOptions = LayoutOptions.Start,
+                    TranslationX = (uiElement.X + uiElement.Width) - 20,
+                    TranslationY = uiElement.Y + 10
+                };
+                grid.Children.Add(label, 0, 0);
 
                 renderedElements.Add(label);
             }

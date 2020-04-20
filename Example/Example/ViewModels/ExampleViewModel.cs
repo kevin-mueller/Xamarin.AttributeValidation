@@ -5,11 +5,6 @@ namespace Xamarin.AttributeValidation.Example.ViewModels
 {
     public class ExampleViewModel : BaseViewModel
     {
-        private string _errorMessage;
-
-        [ErrorDisplay]
-        public string ErrorMessage { get => _errorMessage; set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); } }
-
         [EmailAddress(typeof(Strings), nameof(Strings.Error_Required))]
         [Required(typeof(Strings), nameof(Strings.Error_EmailAddress))]
         public string EmailAddress { get; set; }

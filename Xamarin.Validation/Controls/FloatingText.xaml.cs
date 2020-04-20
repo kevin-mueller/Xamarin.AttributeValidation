@@ -15,13 +15,6 @@ namespace Xamarin.AttributeValidation.Controls
             };
 
             MessagingCenter.Subscribe<View>(this, "Clear_FloatingText", (sender) => grid.Children.Remove(this));
-
-            //var gr = new TapGestureRecognizer();
-            //grid.GestureRecognizers.Add(gr);
-            //gr.Tapped += delegate
-            //{
-            //    this.IsVisible = false;
-            //};
         }
     }
 }

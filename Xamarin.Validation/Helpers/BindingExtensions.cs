@@ -8,7 +8,7 @@ namespace Xamarin.AttributeValidation.Helpers
 {
     internal static class BindingExtensions
     {
-        private static MethodInfo _bindablePropertyGetContextMethodInfo = typeof(BindableObject).GetMethod("GetContext", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo _bindablePropertyGetContextMethodInfo = typeof(BindableObject).GetMethod("GetContext", BindingFlags.NonPublic | BindingFlags.Instance);
         private static FieldInfo _bindablePropertyContextBindingFieldInfo;
 
         public static Binding GetBinding(this BindableObject bindableObject, BindableProperty bindableProperty)
