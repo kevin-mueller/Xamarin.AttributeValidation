@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Xamarin.AttributeValidation.Attributes;
 using Xamarin.AttributeValidation.Helpers;
+using Xamarin.AttributeValidation.Models;
 using Xamarin.Forms;
 
 namespace Xamarin.AttributeValidation
@@ -12,9 +12,13 @@ namespace Xamarin.AttributeValidation
     {
         private static Validation _instance;
 
-        private readonly Dictionary<View, PropertyInfo> UIPropertyDictionary;
+        private readonly object viewModel;
+
+        private readonly List<ValidationModel> UiPropertyMapping;
 
         private bool HasBeenValidatedBefore;
+
+        private readonly List<View> renderedElements;
 
         internal static Validation GetInstance(Page page)
         {
@@ -23,22 +27,23 @@ namespace Xamarin.AttributeValidation
 
         private Validation(Page page)
         {
-            UIPropertyDictionary = GetUiPropertyDictionary(page);
+            UiPropertyMapping = GetUiPropertyDictionary(page);
+            renderedElements = new List<View>();
+            viewModel = page.BindingContext;
         }
 
         internal bool Validate(Page page)
         {
-            var viewModel = page.BindingContext;
             //This maps the elements in the UI to their bound property in the viewmodel.
 
-            if (UIPropertyDictionary?.Count == 0)
+            if (UiPropertyMapping?.Count == 0)
                 throw new Exception("No Binding between ViewModel and UI Elements found.");
 
             Grid grid;
             if (!HasBeenValidatedBefore)
             {
                 //Get a dummy element, for context reasons
-                var dummyElement = UIPropertyDictionary.Keys.First();
+                var dummyElement = UiPropertyMapping[0].UiElement;
 
                 //Wrap everything in a grid, on the same row, in order to overlay elements.
                 grid = new Grid();
@@ -54,8 +59,26 @@ namespace Xamarin.AttributeValidation
                 grid = (Grid)((ContentPage)page).Content;
             }
 
-            foreach (var property in UIPropertyDictionary.Values)
+            page.SizeChanged += delegate
             {
+                //Only re-render if there are already rendered elements.
+                if (renderedElements.Count > 0)
+                    RenderElements(grid, page);
+            };
+
+            UpdateValidationResults();
+            RenderElements(grid, page);
+
+            HasBeenValidatedBefore = true;
+            return true;
+        }
+
+        private void UpdateValidationResults()
+        {
+            foreach (var validationModel in UiPropertyMapping)
+            {
+                var property = validationModel.ViewModelProperty;
+                List<string> result = new List<string>();
                 string propertyValue = string.Empty;
                 try
                 {
@@ -80,51 +103,66 @@ namespace Xamarin.AttributeValidation
                         //This is another attribute. Doesn't concern us.
                         continue;
                     }
-
                     var validationResult = validationAttribute.ValidateValue(propertyValue);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
-                        foreach (var view in UIPropertyDictionary.Where(pair => pair.Value.Equals(property)).Select(pair => pair.Key))
-                        {
-                            Entry uiElement;
-                            try
-                            {
-                                uiElement = (Entry)view;
-                            }
-                            catch (InvalidCastException)
-                            {
-                                throw new Exception("Only Entry is supported for input validation.");
-                            }
-
-                            var label = new Label()
-                            {
-                                Text = "❗",
-                                TextColor = Color.Red,
-                                //HorizontalTextAlignment = TextAlignment.Center,
-                                //VerticalTextAlignment = TextAlignment.Center,
-                                //HorizontalOptions = LayoutOptions.CenterAndExpand,
-                                //VerticalOptions = LayoutOptions.CenterAndExpand
-                                TranslationX = (uiElement.X + uiElement.Width) - 20,
-                                TranslationY = uiElement.Y + 10
-                            };
-                            grid.Children.Add(label, 0, 0);
-
-                            var gestureRecognizer = new TapGestureRecognizer();
-                            gestureRecognizer.Tapped += async delegate
-                            {
-                                //TODO better displayment of the validaiton result. like a little bubble or something.
-                                await page.DisplayAlert("Validation", validationResult, "OK");
-                            };
-                            label.GestureRecognizers.Add(gestureRecognizer);
-                        }
+                        result.Add(validationResult);
                     }
                 }
+                validationModel.ValidationResult = result;
             }
-            HasBeenValidatedBefore = true;
-            return true;
         }
 
-        private Dictionary<View, PropertyInfo> GetUiPropertyDictionary(Page page)
+        private void RenderElements(Grid grid, Page page)
+        {
+            //First clear all existing rendered elements.
+            if (renderedElements.Count > 0)
+            {
+                foreach (var renderedElement in renderedElements)
+                {
+                    grid.Children.Remove(renderedElement);
+                }
+            }
+
+            foreach (var valModel in UiPropertyMapping)
+            {
+                var view = valModel.UiElement;
+                Entry uiElement;
+                try
+                {
+                    uiElement = (Entry)view;
+                }
+                catch (InvalidCastException)
+                {
+                    throw new Exception("Only Entry is supported for input validation.");
+                }
+
+                var label = new Label()
+                {
+                    Text = "❗",
+                    TextColor = Color.Red,
+                    //HorizontalTextAlignment = TextAlignment.Center,
+                    //VerticalTextAlignment = TextAlignment.Center,
+                    //HorizontalOptions = LayoutOptions.CenterAndExpand,
+                    //VerticalOptions = LayoutOptions.CenterAndExpand
+                    TranslationX = (uiElement.X + uiElement.Width) - 20,
+                    TranslationY = uiElement.Y + 10
+                };
+                grid.Children.Add(label, 0, 0);
+
+                var gestureRecognizer = new TapGestureRecognizer();
+                gestureRecognizer.Tapped += async delegate
+                {
+                    //TODO better displayment of the validaiton result. like a little bubble or something.
+                    await page.DisplayAlert("Validation", valModel.ValidationResult.ToString(), "OK");
+                };
+                label.GestureRecognizers.Add(gestureRecognizer);
+
+                renderedElements.Add(label);
+            }
+        }
+
+        private List<ValidationModel> GetUiPropertyDictionary(Page page)
         {
             var dummyPage = new ContentPage();
             var dummyLayout = new StackLayout();
@@ -147,7 +185,7 @@ namespace Xamarin.AttributeValidation
                 throw new Exception("This Page can not be validated. There are no elements.");
 
             //Map the UI Element to the property in the viewModel
-            var viewModelUiDict = new Dictionary<View, PropertyInfo>();
+            var viewModelUiDict = new List<ValidationModel>();
 
             //Get all properties from the viewModel, that implement our interface
             var viewModelRelevantProperties = viewModel.GetType().GetProperties().Where(x => x.GetCustomAttributes(typeof(IValidationAttribute), false) != null);
@@ -162,7 +200,7 @@ namespace Xamarin.AttributeValidation
                 if (viewModelProperty == null)
                     continue; //could be any property in the viewModel. Skip.
 
-                viewModelUiDict.Add(el, viewModelProperty);
+                viewModelUiDict.Add(new ValidationModel() { UiElement = el, ViewModelProperty = viewModelProperty });
             }
             return viewModelUiDict;
         }
