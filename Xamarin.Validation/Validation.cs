@@ -38,6 +38,21 @@ namespace Xamarin.AttributeValidation
 
         internal async Task<bool> ValidateAsync(Page page)
         {
+            bool result = false;
+            Task t = new Task(delegate
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    result = ActionValidate(page);
+                });
+            });
+            t.Start();
+            t.Wait();
+            return await Task.FromResult(result);
+        }
+
+        private bool ActionValidate(Page page)
+        {
             if (UiPropertyMapping?.Count == 0)
                 throw new Exception("No Binding between ViewModel and UI Elements found.");
 
@@ -82,7 +97,7 @@ namespace Xamarin.AttributeValidation
 
             HasBeenValidatedBefore = true;
 
-            return await Task.FromResult(!UiPropertyMapping.Any(x => x.ValidationResult?.Count > 0));
+            return !UiPropertyMapping.Any(x => x.ValidationResult?.Count > 0);
         }
 
         private void UpdateValidationResults()
