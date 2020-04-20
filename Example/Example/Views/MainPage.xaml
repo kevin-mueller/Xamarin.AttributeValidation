@@ -15,6 +15,6 @@
         <Entry x:Name="Entry_Address" Placeholder="Address + House Number" Text="{Binding Address}" ReturnType="Next" />
         <Entry x:Name="Url" Placeholder="Url" Text="{Binding Url}" ReturnType="Next" />
 
-        <Button HorizontalOptions="CenterAndExpand" Text="Validate" Clicked="Button_Clicked" />
+        <Button HorizontalOptions="FillAndExpand" Text="Validate" Clicked="Button_Clicked" />
     </StackLayout>
 </ContentPage>

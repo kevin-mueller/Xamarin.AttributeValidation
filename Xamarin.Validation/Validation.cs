@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.AttributeValidation.Attributes;
 using Xamarin.AttributeValidation.Controls;
 using Xamarin.AttributeValidation.Helpers;
@@ -35,7 +36,7 @@ namespace Xamarin.AttributeValidation
             viewModel = page.BindingContext;
         }
 
-        internal bool Validate(Page page)
+        internal async Task<bool> ValidateAsync(Page page)
         {
             if (UiPropertyMapping?.Count == 0)
                 throw new Exception("No Binding between ViewModel and UI Elements found.");
@@ -81,7 +82,7 @@ namespace Xamarin.AttributeValidation
 
             HasBeenValidatedBefore = true;
 
-            return !UiPropertyMapping.Any(x => x.ValidationResult?.Count > 0);
+            return await Task.FromResult(!UiPropertyMapping.Any(x => x.ValidationResult?.Count > 0));
         }
 
         private void UpdateValidationResults()
