@@ -15,6 +15,7 @@ namespace Xamarin.AttributeValidation
         private readonly Dictionary<View, PropertyInfo> UIPropertyDictionary;
 
         private bool HasBeenValidatedBefore;
+
         internal static Validation GetInstance(Page page)
         {
             return _instance ?? (_instance = new Validation(page));
@@ -94,33 +95,27 @@ namespace Xamarin.AttributeValidation
                             {
                                 throw new Exception("Only Entry is supported for input validation.");
                             }
+
                             var label = new Label()
                             {
-                                Text = "X",
+                                Text = "❗",
                                 TextColor = Color.Red,
                                 //HorizontalTextAlignment = TextAlignment.Center,
                                 //VerticalTextAlignment = TextAlignment.Center,
                                 //HorizontalOptions = LayoutOptions.CenterAndExpand,
                                 //VerticalOptions = LayoutOptions.CenterAndExpand
-                                TranslationX = uiElement.X + uiElement.Width,
-                                TranslationY = uiElement.Y
+                                TranslationX = (uiElement.X + uiElement.Width) - 20,
+                                TranslationY = uiElement.Y + 10
                             };
-                            //label.TranslateTo(uiElement.X + uiElement.Width, uiElement.Y);
                             grid.Children.Add(label, 0, 0);
-                            //TODO find a way to display the error messages within the entry.
-                            //Example: If error, display littel red icon on the end of the entry. If this icon is tapped, a small "bubble" pops up with the error message.
 
-                            //var index = layout.Children.IndexOf(uiElement);
-                            //if (index >= layout.Children.Count - 1)
-                            //{
-                            //    layout.Children.Add(new Label() { Text = validationAttribute.ErrorMessage, TextColor = Color.Red });
-                            //}
-                            //else
-                            //{
-                            //    layout.Children.Insert(index + 1, new Label() { Text = validationAttribute.ErrorMessage, TextColor = Color.Red });
-                            //}
-                            //uiElement.Placeholder = validationAttribute.ErrorMessage;
-                            //uiElement.PlaceholderColor = Color.Red;
+                            var gestureRecognizer = new TapGestureRecognizer();
+                            gestureRecognizer.Tapped += async delegate
+                            {
+                                //TODO better displayment of the validaiton result. like a little bubble or something.
+                                await page.DisplayAlert("Validation", validationResult, "OK");
+                            };
+                            label.GestureRecognizers.Add(gestureRecognizer);
                         }
                     }
                 }
@@ -141,7 +136,7 @@ namespace Xamarin.AttributeValidation
 
             var pageContent = pageContentProperty.GetValue(page);
 
-            //pageContent actually has two Children properties. (One of them is of type IReadonlyList.
+            //pageContent actually has two Children properties. (One of them is of type IReadonlyList)
             //I think this is an internal type and can be ignored. For now the first property is picked.
             var childrenProperty = Array.Find(pageContent.GetType().GetProperties(), x => x.Name.Equals(nameof(dummyLayout.Children)));
             if (childrenProperty == null)
