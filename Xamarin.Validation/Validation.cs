@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.AttributeValidation.Attributes;
+using Xamarin.AttributeValidation.Controls;
 using Xamarin.AttributeValidation.Helpers;
 using Xamarin.AttributeValidation.Models;
 using Xamarin.Forms;
@@ -51,7 +52,14 @@ namespace Xamarin.AttributeValidation
                 var layout = (Layout)dummyElement.Parent;
                 grid.Children.Add(layout, 0, 0);
 
-                grid.Children.Add(new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand, TextColor = Color.Red });
+                //Tap event
+                var gr = new TapGestureRecognizer();
+                grid.GestureRecognizers.Add(gr);
+                gr.Tapped += delegate
+                {
+                    MessagingCenter.Send<View>(grid, "Clear_FloatingText");
+                };
+
                 ((ContentPage)page).Content = grid;
             }
             else
@@ -63,11 +71,11 @@ namespace Xamarin.AttributeValidation
             {
                 //Only re-render if there are already rendered elements.
                 if (renderedElements.Count > 0)
-                    RenderElements(grid, page);
+                    RenderElements(grid);
             };
 
             UpdateValidationResults();
-            RenderElements(grid, page);
+            RenderElements(grid);
 
             HasBeenValidatedBefore = true;
             return true;
@@ -113,7 +121,7 @@ namespace Xamarin.AttributeValidation
             }
         }
 
-        private void RenderElements(Grid grid, Page page)
+        private void RenderElements(Grid grid)
         {
             //First clear all existing rendered elements.
             if (renderedElements.Count > 0)
@@ -141,22 +149,24 @@ namespace Xamarin.AttributeValidation
                 {
                     Text = "❗",
                     TextColor = Color.Red,
-                    //HorizontalTextAlignment = TextAlignment.Center,
-                    //VerticalTextAlignment = TextAlignment.Center,
-                    //HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    //VerticalOptions = LayoutOptions.CenterAndExpand
                     TranslationX = (uiElement.X + uiElement.Width) - 20,
                     TranslationY = uiElement.Y + 10
                 };
                 grid.Children.Add(label, 0, 0);
 
-                var gestureRecognizer = new TapGestureRecognizer();
-                gestureRecognizer.Tapped += async delegate
+                var gestureRecognizerLabel = new TapGestureRecognizer();
+                gestureRecognizerLabel.Tapped += delegate
                 {
-                    //TODO better displayment of the validaiton result. like a little bubble or something.
-                    await page.DisplayAlert("Validation", valModel.ValidationResult.ToString(), "OK");
+                    var bubble = new FloatingText(grid)
+                    {
+                        TranslationX = uiElement.X + uiElement.Width,
+                        TranslationY = uiElement.Y + uiElement.Height
+                    };
+                    bubble.FindByName<Label>("InfoText").Text = valModel.ValidationResult[0];
+
+                    grid.Children.Add(bubble, 0, 0);
                 };
-                label.GestureRecognizers.Add(gestureRecognizer);
+                label.GestureRecognizers.Add(gestureRecognizerLabel);
 
                 renderedElements.Add(label);
             }

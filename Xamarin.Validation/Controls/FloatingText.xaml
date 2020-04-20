@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             VerticalOptions="Start"
+             HorizontalOptions="Start"
+             x:Class="Xamarin.AttributeValidation.Controls.FloatingText">
+    <ContentView.Content>
+        <StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
+                    x:Name="Layout_Bubble"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start">
+            <Grid x:Name="MessageGridContainer"
+                  HorizontalOptions="Start"
+                  BackgroundColor="#01000000">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75*"></ColumnDefinition>
+                    <ColumnDefinition Width="25*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="MessageGrid" HorizontalOptions="Start" VerticalOptions="Start">
+                    <Grid BackgroundColor="Black" HeightRequest="15" WidthRequest="15"
+            HorizontalOptions="End" VerticalOptions="Start" Rotation="45"
+            Margin="0,0,2.5,0" InputTransparent="True" />
+                    <Grid Padding="5,5,5,5" BackgroundColor="Black"  Margin="0,7,0,0"
+                HorizontalOptions="FillAndExpand" InputTransparent="True">
+                        <Label x:Name="InfoText" TextColor="Red"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    InputTransparent="True" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>
