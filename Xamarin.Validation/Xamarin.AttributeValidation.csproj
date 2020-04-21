@@ -7,17 +7,17 @@
     <ProjectUrl>https://github.com/kevin-mueller/Xamarin.AttributeValidation</ProjectUrl>
     <ProjectType>git</ProjectType>
 
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
 
-    <PackageReleaseNotes>Fixed error formatting</PackageReleaseNotes>
+    <PackageReleaseNotes>Complete overhaul of the validation display system. No ErrorDisplay Attribute needed anymore. Validation Messages are showed directly in the corresponding entry.</PackageReleaseNotes>
 
     <Description>Allows the usage of attributes on properties in the ViewModel to validate the UI.</Description>
 
     <PackageProjectUrl>https://github.com/kevin-mueller/Xamarin.AttributeValidation</PackageProjectUrl>
 
-    <FileVersion>1.0.0.1</FileVersion>
+    <FileVersion>2.0.0.0</FileVersion>
 
-    <Version>1.0.3</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />
