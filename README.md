@@ -119,4 +119,3 @@ Properties:
 Constructor:
 * Minimum Length
 ```
-
