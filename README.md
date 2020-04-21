@@ -8,6 +8,8 @@ https://www.nuget.org/packages/Xamarin.AttributeValidation/
 This library allows to use attributes in the ViewModel to validate input fields.
 The usage is very similar to ASP.NET Core Form validation.
 
+Take a look at the examples in this repository or:
+
 Step by Step:
 1. Add a reference to Xamarin.AttributeValidation via NuGet.
 2. Assuming your XAML looks something like this:
@@ -19,8 +21,6 @@ Step by Step:
     mc:Ignorable="d" x:Class="Example.Views.RegisterPage">
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand">
-            <Label x:Name="Label_ErrorMessage" Text="{Binding ErrorMessage}" Margin="0,0,0,15" HorizontalOptions="Center" TextColor="Red" />
-
             <Entry x:Name="Input_Name" Text="{Binding Name}" Keyboard="Default" Placeholder="Name" Margin="0,0,0,15" />
             <Entry x:Name="Input_Email" Text="{Binding Email}" Keyboard="Email" Placeholder="Email" Margin="0,0,0,15" />
             <Entry x:Name="Input_Password" Text="{Binding Password}" IsPassword="True" Placeholder="Password" Margin="0,0,0,15" />
@@ -38,8 +38,6 @@ namespace Example.Mobile.ViewModels
 {
     public class RegisterViewModel : INotifyPropertyChanged
     {
-        private string _errorMessage;
-
         //The EmailAddress attribute makes sure that the value is a valid Email Address.
         [EmailAddress(typeof(StringResources), nameof(StringResources.Error_invalidEmailAddress))]
         public string Email { get; set; }
@@ -51,30 +49,6 @@ namespace Example.Mobile.ViewModels
         //The StringLength Attribute makes sure the value is of the specified length.
         [StringLength(2, typeof(StringResources), nameof(StringResources.Error_invalidName))]
         public string Name { get; set; }
-
-        //The ErrorDisplay Attribute is used to identify the property that holds the ErrorMessages.
-        //If this Attribute is missing in your viewmodel, an exeption will be thrown.
-        [ErrorDisplay]
-        public string ErrorMessage { get => _errorMessage; set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); } }
-
-
-        //This is used to make sure the UI is updated whenever the value of ErrorMessage is changed.
-        //This is probably allready implemented in BaseViewModel.cs
-        //If not, you can copy paste this region.
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion INotifyPropertyChanged
     }
 }
 ```
@@ -100,16 +74,18 @@ namespace Example.Views
         private async void Register_Clicked(object sender, EventArgs e)
         {
             //Pass the viewModel as parameter
-            var isValid = await Validator.Validate(viewModel);
+            var isValid = await this.ValidateAsync();
+            if (isValid)
+                await DisplayAlert("Validation", "Model is valid", "OK");
             //isValid holds a boolean, representing if the ViewModel is valid or not.
-            //The Validator will automatically display the errormessage in the UI.
+            //The Validator will automatically display the errormessages in the UI.
         }
     }
 }
 ```
 
 # Supported Attributes:
-Every Attribute (except the ErrorDisplay attribute) must be given an error message in its constructor.
+Every Attribute must be given an error message in its constructor.
 Since Attributes are hardcoded into the assembly, you can only pass hardcoded strings.
 But don't worry!
 Every Attribute has an overload, where you can pass the type and the key of a resource file.
@@ -142,10 +118,3 @@ Properties:
 ```
 Constructor:
 * Minimum Length
-
-### ErrorDisplay
-```csharp
-//Merely used to display the error messages. An exception is thrown, if this is missing in the viewmodel.
-[ErrorDisplay]
-```
-
