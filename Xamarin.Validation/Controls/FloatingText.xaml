@@ -22,7 +22,7 @@
                 <Grid x:Name="MessageGrid" HorizontalOptions="Start" VerticalOptions="Start">
                     <Grid BackgroundColor="Red" HeightRequest="7" WidthRequest="7"
                             HorizontalOptions="End" VerticalOptions="Start" Rotation="45"
-                            Margin="0,0,7,0" InputTransparent="True" />
+                            Margin="0,0,8,0" InputTransparent="True" />
                     
                     <Grid Padding="5,5,5,5" BackgroundColor="Black"  Margin="0,3.5,0,0"
                             HorizontalOptions="FillAndExpand" InputTransparent="True">

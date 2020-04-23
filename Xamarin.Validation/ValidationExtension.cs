@@ -15,7 +15,8 @@ namespace Xamarin.AttributeValidation
         /// </returns>
         public static async Task<bool> ValidateAsync(this Page page)
         {
-            return await Validation.GetInstance(page).ValidateAsync(page);
+            var instance = await Validation.GetInstance(page);
+            return instance.Validate(page);
         }
     }
 }

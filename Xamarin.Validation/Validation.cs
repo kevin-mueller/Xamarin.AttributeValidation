@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.AttributeValidation.Attributes;
 using Xamarin.AttributeValidation.Controls;
@@ -22,36 +23,28 @@ namespace Xamarin.AttributeValidation
 
         private readonly List<View> renderedElements;
 
-        internal static Validation GetInstance(Page page)
+        internal static async Task<Validation> GetInstance(Page page)
         {
-            return _instance ?? (_instance = new Validation(page));
+            //Wrap the constructor in an async method. Allows all the Reflection stuff to be executed async.
+            var task = new Task(delegate
+            {
+                if (_instance == null)
+                    _instance = new Validation(page);
+            });
+            task.Start();
+            await task;
+            return await Task.FromResult(_instance);
         }
 
         private Validation(Page page)
         {
             //This maps the elements in the UI to their bound property in the viewmodel.
             UiPropertyMapping = GetUiPropertyDictionary(page);
-
             renderedElements = new List<View>();
             viewModel = page.BindingContext;
         }
 
-        internal async Task<bool> ValidateAsync(Page page)
-        {
-            bool result = false;
-            Task t = new Task(delegate
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    result = ActionValidate(page);
-                });
-            });
-            t.Start();
-            t.Wait();
-            return await Task.FromResult(result);
-        }
-
-        private bool ActionValidate(Page page)
+        public bool Validate(Page page)
         {
             if (UiPropertyMapping?.Count == 0)
                 throw new Exception("No Binding between ViewModel and UI Elements found.");
