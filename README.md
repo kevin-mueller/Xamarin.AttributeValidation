@@ -118,3 +118,26 @@ Properties:
 ```
 Constructor:
 * Minimum Length
+
+### Range
+```csharp
+//Using localized string value
+[Range(typeof(Strings), nameof(Strings.Error_Range), 18, 99)]
+```
+Constructor:
+* From (double)
+* To (double)
+
+### RegularExpression
+```csharp
+//Using localized string value
+[RegularExpression(typeof(Strings), nameof(Strings.Error_Regex), @"\d")]
+```
+Constructor:
+* RegExpression (string)
+
+### Url
+```csharp
+//Using localized string value
+[Url(typeof(Strings), nameof(Strings.Error_Url))]
+```
