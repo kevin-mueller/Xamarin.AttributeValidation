@@ -73,7 +73,6 @@ namespace Example.Views
 
         private async void Register_Clicked(object sender, EventArgs e)
         {
-            //Pass the viewModel as parameter
             var isValid = await this.ValidateAsync();
             if (isValid)
                 await DisplayAlert("Validation", "Model is valid", "OK");
